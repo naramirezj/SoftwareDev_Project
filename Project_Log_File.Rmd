@@ -1,0 +1,95 @@
+---
+title: "Project Log File"
+author: "Natalia Ramirez"
+date: "2024-02-06"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Log File
+## Week 1
+Spent two hours revising and selecting my data set in Kaggle.
+**Selected data set: "Airbnb Market Analysis & Real Estate Sales Data"**
+Source[https://www.kaggle.com/datasets/computingvictor/zillow-market-analysis-and-real-estate-sales-data]
+
+## Week 2
+Dataset experimentation and plotting
+```R
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+#Reading Airbnb Market_Analysis
+data_first <- read.csv('/Users/nataliaramirez/Desktop/CSC324/market_analysis.csv', sep = ';')
+
+# Filtering by airbnb's with 5 bedrooms, selecting only 
+# important columns, mutating guests to display 
+# only numbers, group the graph by guests
+data_first <- data_first %>%
+                filter(bedrooms == "5") %>%
+                select(zipcode:nightly.rate) %>%
+                mutate(guests = as.numeric(gsub("\\+", "", guests)),
+                revenue = as.numeric(gsub(",", ".", revenue)),
+                nightly.rate = as.numeric(gsub(",", ".", nightly.rate))) %>%
+                filter(revenue != 0.00) 
+
+#Plotting a boxplot
+data_first |>
+  as_tibble() |>
+  select(city, revenue) |>
+  head(3)
+  
+data_first %>%
+  select(city, revenue) %>%
+  qplot(city, revenue, geom = "boxplot", data = .)
+
+data_first |>
+  pivot_longer(
+    c(revenue, nightly.rate),
+    names_to = "Attribute",
+    values_to = "Measurement"
+) |>
+
+select(city, Attribute, Measurement) %>%
+qplot(Attribute, Measurement,
+        geom = "boxplot",
+        facets = . ~ city, data = .)
+
+# Filtering data and getting rid of rows with no nightly rate
+data_select <- data_first %>%
+  mutate(occupancy= as.numeric(gsub(",", ".", occupancy))) %>%
+  select(city, bedrooms, bathrooms, guests, occupancy, nightly.rate, revenue) 
+print(data_select)
+
+# Summarizing based on mean for average nightly rate and max value in revenue
+summary_data <- data_select %>%
+  group_by(city) %>%
+  summarize(
+    avg_nightly_rate = mean(nightly.rate),
+    max_revenue = max(revenue)
+  )
+print(summary_data)
+
+# Using tidyr to plot both measurements in a scatter plot
+summary_data |>
+  pivot_longer(
+    c(avg_nightly_rate, max_revenue),
+    names_to = "Attribute",
+    values_to = "Measurement"
+) |>
+
+select(city, Attribute, Measurement) %>%
+    qplot(Attribute, Measurement,
+        geom = "point",
+        facets = . ~ city, data = .)
+
+#Arranging in descending order based on the occupancy column
+arranged_data <- data_select %>%
+  arrange(desc(occupancy))
+
+print(arranged_data)
+```
+

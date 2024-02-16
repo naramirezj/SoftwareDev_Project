@@ -92,4 +92,31 @@ arranged_data <- data_select %>%
 
 print(arranged_data)
 ```
+## Week 3
+Experimentation with visualizations.
+### Histogram
+```R
+# ggplot histogram
+library(ggplot2)
+ggplot(data, aes(x = bathrooms)) +
+  geom_histogram(fill = "coral1", color = "black", bins = 7) +
+  labs(title = "Distribution of Number of Bathrooms (ggplot2)",
+       x = "Number of Bathrooms", y = "Frequency")
+```
 
+## Week 4
+### Bubbleplot
+```R
+# Aggregating the data for each bathroom number and getting the average nightly rate and revenue
+summary_stats <- aggregate(cbind(revenue, nightly.rate) ~ bathrooms, data = data_filter, 
+                            FUN = function(x) c(median = median(x), average = mean(x)))
+                            
+# Plotting the bubble graph with transparency and the Revenue vs Average Nightly Rate by Number of Bathrooms
+ggplot(summary_stats, aes(x = `nightly.rate`[,"average"], y = `revenue`[,"median"], size = bathrooms)) +
+  geom_point(alpha = 0.7) +
+  labs(title = "Bubble Graph: Revenue vs Average Nightly Rate by Number of Bathrooms",
+       x = "Average Nightly Rate",
+       y = "Average Revenue",
+       size = "Number of Bathrooms") +
+  theme_minimal()
+```

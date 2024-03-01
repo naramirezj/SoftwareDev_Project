@@ -7,3 +7,8 @@ Experimentation under Project_Log_File.Rmd
 Experimentation under Project_Log_File.Rmd
 ## Week 4 
 Added data set description
+## Week 5
+Started visualizations and plotting
+## Week 6
+Created app with visualizations and input parameters
+Added progress images

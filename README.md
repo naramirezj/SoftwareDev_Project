@@ -10,5 +10,5 @@ Added data set description
 ## Week 5
 Started visualizations and plotting
 ## Week 6
-Created app with visualizations and input parameters
+Created app with visualizations and input parameters\
 Added progress images

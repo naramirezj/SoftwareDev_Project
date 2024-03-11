@@ -9,6 +9,7 @@ library(dplyr)
 library(ggplot2)
 library(leaflet)
 library(shinyjs)
+library(tm)
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
@@ -73,9 +74,9 @@ ui <- fluidPage(
 # Define server logic 
 server <- function(input, output, session) {
   # Reading all data sets
-  time_log <- read.csv('/Users/nataliaramirez/Desktop/SoftwareDev_Project/time_log.csv', sep = ',')
-  df1 <- read.csv('/Users/nataliaramirez/Desktop/CSC324/market_analysis.csv', sep = ';')
-  df2 <- read.csv('/Users/nataliaramirez/Desktop/CSC324/geolocation.csv', sep = ';')
+  time_log <- read.csv('https://raw.githubusercontent.com/naramirezj/SoftwareDev_Project/main/time_log.csv', sep = ',')
+  df1 <- read.csv('https://raw.githubusercontent.com/naramirezj/SoftwareDev_Project/main/market_analysis.csv', sep = ';')
+  df2 <- read.csv('https://raw.githubusercontent.com/naramirezj/SoftwareDev_Project/main/geolocation.csv', sep = ';')
   # Merging two data sets for location information
   merged_data <- merge(df1, df2 %>% mutate(unified_id = sub("^AIR", "", unified_id)), by = "unified_id")
   merged_data <- merged_data %>%
